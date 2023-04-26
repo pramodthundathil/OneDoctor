@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Doctor Consultation</h1>
+{% for m in messages %}
+<h2 style="color:red">{{m}}</h2>
+{% endfor %}
+
+{% endblock %}
