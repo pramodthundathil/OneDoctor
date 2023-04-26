@@ -414,7 +414,7 @@ def signup(request):
 @unautenticated_user
 def registration(request):
     
-    user = UserRegistration()
+    form = UserRegistration()
     
     if request.method == 'POST':
         
@@ -443,7 +443,7 @@ def registration(request):
                 messages.info(request,"Account Was Created")
                 return redirect('signup')
     
-    return render(request,'register.html',{"user":user})
+    return render(request,'register.html',{"form":form})
 
 @admin_only
 def admin_view(request):

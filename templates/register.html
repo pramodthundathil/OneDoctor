@@ -5,6 +5,7 @@
 {% for message in messages %}
  <h6  style="color: red;"> {{message}} </h6>
 {% endfor %}
+<h6 style="color:red">{{form.errors}}</h6>
 
 <div class="container mt-4">
     <form class="row" method="POST" action="{% url 'registration' %}">
@@ -14,7 +15,7 @@
         <div class="form-group">
      
                     {% csrf_token %}
-                  {% for i in user  %}
+                  {% for i in form  %}
                   {{i.label}}<br>
                   {{i}}<br><br>
                   
