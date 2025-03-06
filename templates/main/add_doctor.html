@@ -1,45 +1,147 @@
 {% extends 'main/Admin.html' %}
 
 {% block content %}
-
-<h1>Add Doctor 
-</h1>
-
-<div class="container mt-4">
-    <form class="row" method="POST" action="{% url 'add_doctor' %}">
-      {% csrf_token %}
-
-      <div class="col-md-10">
-        <div class="form-group">
-          <label for="name">Doctor Name</label>
-          <input
-            class="form-control"
-            id="name"
-            placeholder="Doctor Name"
-            name="name"
-          />
-          
-          <label for="spacial">Doctor Specialisation</label>
-          <select required class="form-control" id="doctor" name="spacial" >
-            <option value="" disabled selected>Select Doctor Specialisation</option>
-            <option value="Neurologists">Neurologists</option>
-            <option value="Obstetrics & Gynaecology">Obstetrics & Gynaecology</option>
-            <option value="Orthopedics">Orthopedics</option>
-          </section>
-          <label for="date">Select Date</label>
-          <input type='date' name='date' class="form-control"/>
-        </div>
+<div class="content-card">
+    <div class="d-flex align-items-center mb-4">
+        <i class="fas fa-user-md stat-icon me-3"></i>
+        <h2 class="mb-0">Add Doctor</h2>
     </div>
-    <div class="col-md-4">
-        <button type="submit" class="btn-lg btn-block btn btn-danger mb-5">
-          Add Doctor
-        </button>
-      </div>
-     
-    </form>
-  </div>
 
+    <div class="mt-4">
+        <form method="POST" action="{% url 'add_doctor' %}" class="admin-form">
+            {% csrf_token %}
+            
+            <div class="row g-4">
+                <div class="col-md-12">
+                    <div class="form-group mb-3">
+                        <label for="name" class="form-label">
+                            <i class="fas fa-user-md me-2"></i>Doctor Name
+                        </label>
+                        <input
+                            class="form-control"
+                            id="name"
+                            placeholder="Enter doctor's full name"
+                            name="name"
+                            required
+                        />
+                    </div>
+                </div>
+                
+                <div class="col-md-12">
+                    <div class="form-group mb-3">
+                        <label for="spacial" class="form-label">
+                            <i class="fas fa-stethoscope me-2"></i>Doctor Specialization
+                        </label>
+                        <select required class="form-control" id="doctor" name="spacial">
+                            <option value="" disabled selected>Select Doctor Specialization</option>
+                            <option value="Neurologists">Neurologists</option>
+                            <option value="Obstetrics & Gynaecology">Obstetrics & Gynaecology</option>
+                            <option value="Orthopedics">Orthopedics</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="col-md-12">
+                    <div class="form-group mb-3">
+                        <label for="date" class="form-label">
+                            <i class="fas fa-calendar-alt me-2"></i>Joining Date
+                        </label>
+                        <input type='date' name='date' class="form-control" required/>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-4">
+                <button type="submit" class="btn btn-primary btn-lg">
+                    <i class="fas fa-plus-circle me-2"></i>Add Doctor
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
 
-</section>
+<style>
+    /* Additional styles for the admin form */
+    .admin-form .form-control {
+        background: rgba(15, 23, 42, 0.7);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: var(--light);
+        padding: 12px 16px;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+    }
+    
+    .admin-form .form-control:focus {
+        background: rgba(15, 23, 42, 0.9);
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.3);
+    }
+    
+    .admin-form select.form-control {
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23ffffff' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 1rem center;
+        background-size: 16px 12px;
+        padding-right: 2.5rem;
+    }
+    
+    .admin-form .form-label {
+        font-weight: 500;
+        margin-bottom: 8px;
+        color: rgba(255, 255, 255, 0.8);
+    }
+    
+    /* Calendar input styling */
+    input[type="date"] {
+        color-scheme: dark;
+    }
+    
+    /* Button styling */
+    .btn-primary {
+        background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+        border: none;
+        border-radius: 8px;
+        padding: 12px 24px;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        box-shadow: 0 4px 15px rgba(52, 152, 219, 0.4);
+        transition: all 0.3s ease;
+    }
 
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(52, 152, 219, 0.6);
+        background: linear-gradient(135deg, #2980b9 0%, #3498db 100%);
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Set default date to today
+        const today = new Date();
+        const year = today.getFullYear();
+        let month = today.getMonth() + 1;
+        let day = today.getDate();
+        
+        if (month < 10) month = '0' + month;
+        if (day < 10) day = '0' + day;
+        
+        const dateInput = document.querySelector('input[type="date"]');
+        dateInput.value = `${year}-${month}-${day}`;
+        
+        // Add form animations
+        const formElements = document.querySelectorAll('.form-group');
+        formElements.forEach((el, index) => {
+            el.style.opacity = 0;
+            el.style.transform = 'translateY(10px)';
+            el.style.transition = 'all 0.3s ease';
+            
+            setTimeout(() => {
+                el.style.opacity = 1;
+                el.style.transform = 'translateY(0)';
+            }, 100 * index);
+        });
+    });
+</script>
 {% endblock %}

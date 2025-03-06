@@ -6,6 +6,10 @@ from sklearn.neighbors import KNeighborsClassifier
 from django.views.generic import TemplateView
 from django.views.decorators.csrf import csrf_exempt
 
+
+def index(request):
+    return render(request,"base.html")
+
 def HomeView(request):
     value = "None"
     name="None"
@@ -506,6 +510,68 @@ def doctor_list(request):
     return render(request,'main/doctor_list.html',{"doctors":doctors})
         
     
+def chat_bot(request):
+    return render(request,"chat_bot.html")
+
+
+
+# stress identification by virtual assistant
+
+
+import google.generativeai as genai
+
+import re
+
+def preprocess_response(text):
+    """
+    Preprocess the response to handle markdown-like syntax.
+    Converts:
+    - ***text*** to <b><i>text</i></b> (bold + italic)
+    - **text** to <b>text</b> (bold)
+    - *text* to <i>text</i> (italic)
+    - Newlines (\n) to <br> for line breaks
+    """
+    # Handle ***text*** (bold + italic)
+    text = re.sub(r"\*\*\*(.*?)\*\*\*", r"<b><i>\1</i></b>", text)
+
+    # Handle **text** (bold)
+    text = re.sub(r"\*\*(.*?)\*\*", r"<b>\1</b>", text)
+
+    # Handle *text* (italic)
+    text = re.sub(r"\*(.*?)\*", r"<i>\1</i>", text)
+
+    # Convert newline characters (\n) to <br>
+    text = text.replace("\n", "<br>")
+
+    return text
+from django.http import JsonResponse
+def Suggestion(request):
+    if request.method == "POST":
+        question = request.POST.get("message", "").lower().strip()
+
+        
+
+        # Format the prompt
+        prompt = f"""
+            You are a healthcare chatbot of Web Doctor. Answer the customer's questions.
+            The output should include healthcare suggestions, disease predictions, etc.
+            Customer prompt: {question}
+        """
+
+        try:
+            # Configure the GenAI API
+            genai.configure(api_key="AIzaSyDfUGYziPuXs8yjd4dJdgkTiPU0CZWEvX0")
+            model = genai.GenerativeModel("gemini-1.5-flash")
+            response = model.generate_content(prompt)
+
+            # Process the response
+            val = preprocess_response(response.text)
+
+            return JsonResponse({"status": "success", "response": val})
+        except Exception as e:
+            return JsonResponse({"status": "error", "message": str(e)}, status=500)
+
+    return JsonResponse({"status": "error", "message": "Invalid request"}, status=400)
     
 
 

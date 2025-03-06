@@ -1,103 +1,405 @@
-{% load static %}
-
 <!doctype html>
 <html lang="en">
-
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="A Web Application for Heart Disease Prediction, Diabetes Prediction and Breast Cancer Prediciton using various Machine Learning Algorithms based on the Kaggle Datasets.">
-  <meta name="keywords" content="Machine Learning, Django">
-  <meta name="author" content="anaz">
-    <title>WEB DOCTOR</title>
+    <meta name="description" content="A Web Application for Heart Disease Prediction, Diabetes Prediction and Breast Cancer Prediction using various Machine Learning Algorithms based on the Kaggle Datasets.">
+    <meta name="keywords" content="Machine Learning, Django, Healthcare, Disease Prediction">
+    <meta name="author" content="anaz">
+    <title>WEB DOCTOR - Your AI Healthcare Assistant</title>
 
-    <link rel="shortcut icon" href="{% static 'images/logo.png' %}">
-    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
-    <link rel="stylesheet" href="{% static 'css/fontawsom-all.min.css' %}">
-    <link rel="stylesheet" href="{% static 'plugins/slider/css/owl.carousel.min.css' %}">
-    <link rel="stylesheet" href="{% static 'plugins/slider/css/owl.theme.default.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
-</head>
-<body style="background-color: black;">
-    <div class="container body-container">
-        <!-- ################# Header Starts Here#######################--->
-        <header>
-            
-                <div class="row header-nav">
-                    <div class="col-md-3 no-padding col-sm-12 nav-img">
-                        <img style="height: 100px;width: 800px;" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTN9DFtFFPDzkNM4nsSd0A91OAOgC4Ue7OH-JYBcO9HG7Xe8A-nE5vSQRd0r_NzFuiGfrs&usqp=CAU" alt="">
-                       <a data-toggle="collapse" data-target="#menu" href="#menu" ><i class="fas d-block d-md-none small-menu fa-bars"></i></a>
-                    </div>
-                    <div id="menu" class="col-md-9 d-none d-md-block nav-item">
-                        <ul>
-                            <li><a href="{% url 'registration' %}">Register</a></li>
-                            <li><a href="{% url 'signup' %}">Login</a></li>
-                            <!-- <li><a href="{% url 'breast' %}">Breast Cancer</a></li>
-                            <li><a href="{% url 'diabetes' %}">Diabetes</a></li> -->
-                        </ul>
-                    </div>
-                </div>
-
-            
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #e74c3c;
+            --accent: #3498db;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+        }
         
-        </header>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #1a2a3a 0%, #0a1a2a 100%);
+            color: var(--light);
+            min-height: 100vh;
+        }
+        
+        .navbar {
+            background-color: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .navbar-brand img {
+            height: 60px;
+        }
+        
+        .nav-link {
+            color: var(--light);
+            font-weight: 500;
+            margin: 0 15px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .nav-link:hover {
+            color: var(--secondary);
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: var(--secondary);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        .main-content {
+            margin-top: 40px;
+            min-height: calc(100vh - 200px);
+        }
+        
+        .card {
+            background: rgba(44, 62, 80, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        .form-control {
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            border-radius: 8px;
+            padding: 12px 15px;
+        }
+        
+        .form-control:focus {
+            background-color: rgba(255, 255, 255, 0.15);
+            color: white;
+            box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.3);
+            border-color: var(--secondary);
+        }
+        
+        .form-control::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            border: none;
+            border-radius: 8px;
+            padding: 12px 24px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.4);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(231, 76, 60, 0.6);
+            background: linear-gradient(135deg, #c0392b 0%, #e74c3c 100%);
+        }
+        
+        .btn-outline-light {
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 12px 24px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-outline-light:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+        
+        .features-section {
+            margin-top: 50px;
+        }
+        
+        .feature-card {
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .feature-icon {
+            font-size: 40px;
+            margin-bottom: 20px;
+            color: var(--secondary);
+        }
+        
+        .error-message {
+            color: #ff6b6b;
+            background-color: rgba(255, 107, 107, 0.1);
+            border-radius: 8px;
+            padding: 10px 15px;
+            margin-bottom: 20px;
+        }
+        
+        footer {
+            background-color: rgba(15, 23, 42, 0.8);
+            padding: 30px 0;
+            margin-top: 50px;
+        }
+        
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+        
+        .floating-label {
+            position: relative;
+            margin-bottom: 25px;
+        }
+        
+        .floating-label label {
+            position: absolute;
+            left: 15px;
+            top: 12px;
+            color: rgba(255, 255, 255, 0.6);
+            pointer-events: none;
+            transition: 0.3s ease all;
+        }
+        
+        .floating-label input:focus ~ label,
+        .floating-label input:not(:placeholder-shown) ~ label {
+            top: -10px;
+            left: 10px;
+            font-size: 12px;
+            background-color: rgba(44, 62, 80, 0.7);
+            padding: 0 5px;
+        }
+    </style>
+</head>
 
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTN9DFtFFPDzkNM4nsSd0A91OAOgC4Ue7OH-JYBcO9HG7Xe8A-nE5vSQRd0r_NzFuiGfrs&usqp=CAU" alt="Web Doctor Logo" class="img-fluid">
+                <span class="ms-2 fw-bold">WEB DOCTOR</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'registration' %}">Register</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{% url 'signup' %}">Login</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
 
-
-  	
+    <!-- Main Content -->
+    <div class="container main-content">
+        <div class="row justify-content-center align-items-center min-vh-100">
+            <div class="col-lg-6">
+                <div class="text-center mb-5">
+                    <h1 class="display-4 fw-bold mb-3">Your Health AI Assistant</h1>
+                    <p class="lead">Access personalized healthcare predictions, chat with our health bot, and schedule appointments with doctors.</p>
+                </div>
+                <div class="card">
+                    <div class="card-body p-5">
 {% block content %}
 
-
-<div class="container mt-4">
-    <form class="row" method="POST" action="{% url 'signup' %}">
-      {% csrf_token %}
-
-      <div class="col-md-10">
-        <div class="form-group">
-          <label for="username">Username</label>
-          <input
-            type='text'
-            class="form-control"
-            id="name"
-            placeholder="Enter your username"
-            name="username"
-            required
-          />
-        </div>
-        <div class="form-group">
-            <label for="password">Password</label>
-            <input
-              type='password'
-              class="form-control"
-              id="name"
-              placeholder="Enter your password"
-              name="password"
-              required
-            />
-          </div>
-          {% for message in messages %}
-            <h6  style="color: red;"> {{message}} </h6>
-          {% endfor %}
-
-        <button type="submit" class="btn-lg btn-block btn btn-danger mb-5">
-            Login
-          </button>
-        </div>
-      </form>
-    </div>
+                        <h2 class="text-center mb-4">Login to Your Account</h2>
+                        <form method="POST" action="{% url 'signup' %}">
+                            {% csrf_token %}
+                            
+                            <div class="floating-label mb-4">
+                                <input type="text" class="form-control" id="username" name="username" placeholder=" " required>
+                                <label for="username">Username</label>
+                            </div>
+                            
+                            <div class="floating-label mb-4">
+                                <input type="password" class="form-control" id="password" name="password" placeholder=" " required>
+                                <label for="password">Password</label>
+                            </div>
+                            
+                            {% for message in messages %}
+                            <div class="error-message mb-3">
+                                <i class="fas fa-exclamation-circle me-2"></i> {{ message }}
+                            </div>
+                            {% endfor %}
+                            
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary btn-lg pulse-animation">
+                                    <i class="fas fa-sign-in-alt me-2"></i> Login
+                                </button>
+                            </div>
+                            
+                            <div class="text-center mt-4">
+                                <p>Don't have an account? <a href="{% url 'registration' %}" class="text-secondary">Register Now</a></p>
+                            </div>
+                        </form>
+                    </div>
 {% endblock %}
 
-   
-</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Features Section -->
+        <div class="features-section">
+            <div class="row text-center mb-5">
+                <div class="col-12">
+                    <h2 class="fw-bold">What We Offer</h2>
+                    <p class="lead">Our AI-powered healthcare platform helps you stay informed about your health</p>
+                </div>
+            </div>
+            
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-heartbeat"></i>
+                        </div>
+                        <h4>Disease Prediction</h4>
+                        <p>Analyze your symptoms with our advanced ML algorithms to predict heart disease, diabetes, and breast cancer risk.</p>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="card feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <h4>Health Chatbot</h4>
+                        <p>Get instant health advice and information from our AI-powered healthcare assistant.</p>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="card feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-calendar-check"></i>
+                        </div>
+                        <h4>Doctor Appointments</h4>
+                        <p>Book appointments with specialized doctors and receive timely medical consultation.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>About Web Doctor</h5>
+                    <p>An AI-powered healthcare platform that provides disease prediction, health chatbot services, and doctor appointment scheduling.</p>
+                </div>
+                <div class="col-md-3">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-light">Home</a></li>
+                        <li><a href="#" class="text-light">Services</a></li>
+                        <li><a href="#" class="text-light">About Us</a></li>
+                        <li><a href="#" class="text-light">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h5>Connect With Us</h5>
+                    <div class="d-flex gap-3 fs-4">
+                        <a href="#" class="text-light"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="text-light"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-light"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-light"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+            </div>
+            <hr class="mt-4 mb-4 bg-light opacity-25">
+            <div class="text-center">
+                <p class="mb-0">&copy; 2025 Web Doctor. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JS -->
+    <script>
+        // Add some subtle animations and interactions
+        document.addEventListener('DOMContentLoaded', function() {
+            // Adjust navbar background opacity on scroll
+            window.addEventListener('scroll', function() {
+                const navbar = document.querySelector('.navbar');
+                if (window.scrollY > 50) {
+                    navbar.style.backgroundColor = 'rgba(15, 23, 42, 0.95)';
+                } else {
+                    navbar.style.backgroundColor = 'rgba(15, 23, 42, 0.8)';
+                }
+            });
+            
+            // Focus effect for form inputs
+            const formControls = document.querySelectorAll('.form-control');
+            formControls.forEach(input => {
+                input.addEventListener('focus', function() {
+                    this.parentElement.classList.add('focused');
+                });
+                input.addEventListener('blur', function() {
+                    this.parentElement.classList.remove('focused');
+                });
+            });
+            
+            // Add animation to feature cards
+            const featureCards = document.querySelectorAll('.feature-card');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = 1;
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            featureCards.forEach(card => {
+                card.style.opacity = 0;
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(card);
+            });
+        });
+    </script>
 </body>
-
-<script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
-<script src="{% static 'js/popper.min.js' %}"></script>
-<script src="{% static 'js/bootstrap.min.js' %}"></script>
-<script src="{% static 'plugins/scroll-fixed/jquery-scrolltofixed-min.js' %}"></script>
-<script src="{% static 'plugins/slider/js/owl.carousel.min.js' %}"></script>
-<script src="{% static 'js/script.js' %}"></script>
-
-
 </html>

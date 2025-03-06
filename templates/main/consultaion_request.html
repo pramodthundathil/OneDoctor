@@ -1,59 +1,96 @@
 {% extends 'main/Admin.html' %}
 {% block content %}
-{% for message in messages %}
-<h4  style="color: green;"> {{message}} </h4>
-{% endfor %}
-<br>
-<table style='border:2px black solid'>
-    <h3>Consultation Requests</h3>
-    <tr style='border:2px black solid ; width:200px' >
-        <th style='border:2px black solid ; width:200px'>
-            Patiant Name
-        </th>
-        <th style='border:2px black solid; width:200px'>
-            Patiant Disease
-        </th>
-        <th style='border:2px black solid; width:200px'>
-            Doctor Name
-        </th>
-        <th style='border:2px black solid; width:200px'>
-            Date
-        </th>
-        <th style='border:2px black solid; width:200px'>
-            Time
-        </th >
-        <th style='border:2px black solid; width:200px'>
-            Action
-        </th>
-    </tr><br><br>
+<style>
+    /* Table Styling */
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+        font-size: 18px;
+        text-align: left;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    }
     
-{% for request in requests %}
+    th, td {
+        padding: 12px 15px;
+        border: 1px solid #ddd;
+    }
 
-    <tr style='border:2px black solid'>
-        <td style='border:2px black solid'>
-            {{request.Patiant_name}}
-        </td>
-        <td style='border:2px black solid'>
-            {{request.Patiant_disease}}
-        </td>
-        <td style='border:2px black solid'>
-            {{request.Doctor_name}}
-        </td>
-        <td style='border:2px black solid'>
-            {{request.appointment_date}}
-        </td >
-        <td style='border:2px black solid'>
-            {{request.appoiment_time}}
-        </td>
-        <td style='border:2px black solid'>
-            <form action = "{%url 'consultation_delete' %}" method='POST'>
+    th {
+        background-color: #007bff;
+        color: white;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    tr:nth-child(even) {
+        background-color: #272626;
+    }
+
+    tr:hover {
+        background-color: #242222;
+        transition: 0.3s ease-in-out;
+    }
+
+    /* Button Styling */
+    button {
+        background-color: red;
+        color: white;
+        border: none;
+        padding: 8px 12px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: 0.3s ease-in-out;
+    }
+
+    button:hover {
+        background-color: darkred;
+    }
+
+    h3 {
+        margin-bottom: 15px;
+        color: #333;
+    }
+
+    h4 {
+        color: green;
+        font-weight: bold;
+    }
+</style>
+
+{% for message in messages %}
+    <h4>{{ message }}</h4>
+{% endfor %}
+
+<h3>Consultation Requests</h3>
+
+<table>
+    <tr>
+        <th>Patiant Name</th>
+        <th>Patiant Disease</th>
+        <th>Doctor Name</th>
+        <th>Date</th>
+        <th>Time</th>
+        <th>Action</th>
+    </tr>
+    
+    {% for request in requests %}
+    <tr>
+        <td>{{ request.Patiant_name }}</td>
+        <td>{{ request.Patiant_disease }}</td>
+        <td>{{ request.Doctor_name }}</td>
+        <td>{{ request.appointment_date }}</td>
+        <td>{{ request.appoiment_time }}</td>
+        <td>
+            <form action="{% url 'consultation_delete' %}" method="POST">
                 {% csrf_token %}
-                <button value='{{request.id}}' name='submit' >Delete</button>
+                <button value="{{ request.id }}" name="submit">Delete</button>
             </form>
         </td>
     </tr>
-
-{% endfor %}
+    {% endfor %}
 </table>
 
 {% endblock %}

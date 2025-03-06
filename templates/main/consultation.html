@@ -1,77 +1,194 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>Doctor Consultation</h1>
-{% for m in messages %}
-<h5 style="color:red">{{m}}</h5>
-{% endfor %}
-
-<div class="container mt-4">
-    <form class="row" method="POST" action="{% url 'appointment' %}">
-      {% csrf_token %}
-
-      <div class="col-md-10">
-        <div class="form-group">
-          <label for="name">Patiant Name</label>
-          <input
-            class="form-control"
-            id="name"
-            placeholder="{{name}}"
-            Value="{{name}}"
-            name="name"
-            readonly
-          />
-          <label for="name">Disease</label>
-          <input
-            class="form-control"
-            id="name"
-            placeholder="{{disease}}"
-            Value="{{disease}}"
-            name="disease"
-            readonly
-          />
-          <label for="Doctor">Select Doctor</label>
-          <select required class="form-control" id="doctor" name="doctor" >
-            <option value="" disabled selected>Select Doctor</option>
-            {%for doctor in doctors %}
-            <option value="{{doctor.Doctor_name}}">{{doctor.Doctor_name}}</option>
-            {%endfor%}
-            
-          </section>
-          <label for="date">Select Date</label>
-          <input type='date' name='date'  id="datefield" size="22" class="form-control" required/>
-          <label for="time">Select Time</label>
-          <input type='time' name='time' class="form-control" required/>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="content-card animated">
+                <div class="d-flex align-items-center mb-4">
+                    <i class="fas fa-user-md feature-icon me-3"></i>
+                    <h2 class="mb-0">Doctor Consultation</h2>
+                </div>
+                
+                {% for m in messages %}
+                <div class="alert alert-danger mb-4" role="alert">
+                    <i class="fas fa-exclamation-circle me-2"></i> {{m}}
+                </div>
+                {% endfor %}
+                
+                <div class="mt-4">
+                    <form method="POST" action="{% url 'appointment' %}" class="appointment-form">
+                        {% csrf_token %}
+                        
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label for="name" class="form-label">
+                                        <i class="fas fa-user me-2"></i>Patient Name
+                                    </label>
+                                    <input
+                                        class="form-control"
+                                        id="name"
+                                        placeholder="{{name}}"
+                                        value="{{name}}"
+                                        name="name"
+                                        readonly
+                                    />
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label for="disease" class="form-label">
+                                        <i class="fas fa-heartbeat me-2"></i>Disease
+                                    </label>
+                                    <input
+                                        class="form-control"
+                                        id="disease"
+                                        placeholder="{{disease}}"
+                                        value="{{disease}}"
+                                        name="disease"
+                                        readonly
+                                    />
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-12">
+                                <div class="form-group mb-3">
+                                    <label for="doctor" class="form-label">
+                                        <i class="fas fa-stethoscope me-2"></i>Select Doctor
+                                    </label>
+                                    <select required class="form-control" id="doctor" name="doctor">
+                                        <option value="" disabled selected>Select Doctor</option>
+                                        {% for doctor in doctors %}
+                                        <option value="{{doctor.Doctor_name}}">{{doctor.Doctor_name}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label for="datefield" class="form-label">
+                                        <i class="fas fa-calendar-alt me-2"></i>Select Date
+                                    </label>
+                                    <input type='date' name='date' id="datefield" class="form-control" required/>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label for="time" class="form-label">
+                                        <i class="fas fa-clock me-2"></i>Select Time
+                                    </label>
+                                    <input type='time' name='time' class="form-control" required/>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="text-center mt-4">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-calendar-check me-2"></i>Book Appointment
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
-      </div>
-      <div class="col-md-4">
-        <button type="submit" class="btn-lg btn-block btn btn-danger mb-5">
-          Book Now
-        </button>
-      </div>
-    </form>
-  </div>
+    </div>
+</div>
 
+<style>
+    /* Additional styles for the appointment form */
+    .appointment-form .form-control {
+        background: rgba(15, 23, 42, 0.7);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: var(--light);
+        padding: 12px 16px;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+    }
+    
+    .appointment-form .form-control:focus {
+        background: rgba(15, 23, 42, 0.9);
+        border-color: var(--secondary);
+        box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.3);
+    }
+    
+    .appointment-form .form-control:read-only {
+        background: rgba(15, 23, 42, 0.5);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        opacity: 0.8;
+    }
+    
+    .appointment-form select.form-control {
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23ffffff' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 1rem center;
+        background-size: 16px 12px;
+        padding-right: 2.5rem;
+    }
+    
+    .appointment-form .form-label {
+        font-weight: 500;
+        margin-bottom: 8px;
+        color: rgba(255, 255, 255, 0.8);
+    }
+    
+    /* Calendar and time input styling */
+    input[type="date"], input[type="time"] {
+        color-scheme: dark;
+    }
+    
+    /* Custom alert styling */
+    .alert-danger {
+        background: rgba(231, 76, 60, 0.2);
+        border: 1px solid rgba(231, 76, 60, 0.5);
+        color: var(--light);
+        border-radius: 8px;
+    }
+    
+    /* Feature icon styling */
+    .feature-icon {
+        font-size: 30px;
+        color: var(--secondary);
+    }
+</style>
 
-</section>
 <script>
-var today = new Date();
-var dd = today.getDate() + 1;
-var mm = today.getMonth() + 1; //Januarys is 0!
-var yyyy = today.getFullYear();
-
-if (dd < 10) {
-  dd = '0' + dd
-}
-if (mm < 10) {
-  mm = '0' + mm
-}
-
-today = yyyy + '-' + mm + '-' + dd;
-document.getElementById("datefield").setAttribute("min", today);
-document.getElementById("datefield2").setAttribute("min", today)
-  
+    document.addEventListener('DOMContentLoaded', function() {
+        // Set minimum date to tomorrow
+        var today = new Date();
+        var tomorrow = new Date(today);
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        
+        var dd = tomorrow.getDate();
+        var mm = tomorrow.getMonth() + 1; // January is 0!
+        var yyyy = tomorrow.getFullYear();
+        
+        if (dd < 10) {
+            dd = '0' + dd;
+        }
+        if (mm < 10) {
+            mm = '0' + mm;
+        }
+        
+        var tomorrowFormatted = yyyy + '-' + mm + '-' + dd;
+        document.getElementById("datefield").setAttribute("min", tomorrowFormatted);
+        
+        // Add form animations
+        const formElements = document.querySelectorAll('.form-group');
+        formElements.forEach((el, index) => {
+            el.style.opacity = 0;
+            el.style.transform = 'translateY(10px)';
+            el.style.transition = 'all 0.3s ease';
+            
+            setTimeout(() => {
+                el.style.opacity = 1;
+                el.style.transform = 'translateY(0)';
+            }, 100 * index);
+        });
+    });
 </script>
-
-
 {% endblock %}
