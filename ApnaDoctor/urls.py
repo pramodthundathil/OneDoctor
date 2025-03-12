@@ -24,5 +24,6 @@ urlpatterns = [
 
 
     path("chat_bot",chat_bot,name ="chat_bot"),
-    path("Suggestion",Suggestion,name="Suggestion")
+    path("Suggestion",Suggestion,name="Suggestion"),
+    path("doctor_edit/<int:pk>",doctor_edit,name="doctor_edit")
 ]

@@ -4,63 +4,30 @@
 <div class="content-card">
     <div class="d-flex align-items-center mb-4">
         <i class="fas fa-user-md stat-icon me-3"></i>
-        <h2 class="mb-0">Add Doctor</h2>
+        <h2 class="mb-0">Update Doctor</h2>
     </div>
 
     <div class="mt-4">
-        <form method="POST" action="{% url 'add_doctor' %}" class="admin-form">
+        <form method="POST"  class="admin-form">
             {% csrf_token %}
             
             <div class="row g-4">
+                {% for field in form %}
                 <div class="col-md-12">
                     <div class="form-group mb-3">
                         <label for="name" class="form-label">
-                            <i class="fas fa-user-md me-2"></i>Doctor Name
+                            <i class="fas fa-user-md me-2"></i>{{form.label}}
                         </label>
-                        <input
-                            class="form-control"
-                            id="name"
-                            placeholder="Enter doctor's full name"
-                            name="name"
-                            required
-                        />
+                        {{field}}
                     </div>
                 </div>
+                {% endfor %}
                 
-                <div class="col-md-12">
-                    <div class="form-group mb-3">
-                        <label for="spacial" class="form-label">
-                            <i class="fas fa-stethoscope me-2"></i>Doctor Specialization
-                        </label>
-                        <select required class="form-control" id="doctor" name="spacial">
-                            <option value="" disabled selected>Select Doctor Specialization</option>
-                            <option value="Cardiologist">Cardiologist</option>
-                            <option value="Dermatologist">Dermatologist</option>
-                            <option value="Neurologist">Neurologist</option>
-                            <option value="Pediatrician">Pediatrician</option>
-                            <option value="General">General</option>
-                            <option value="Orthopedic">Orthopedic</option>
-                            <option value="Psychiatrist">Psychiatrist</option>
-                            <option value="Oncologist">Oncologist</option>
-                            <option value="Gynecologist">Gynecologist</option>
-                            <option value="Urologist">Urologist</option>
-                        </select>
-                    </div>
-                </div>
-                
-                <div class="col-md-12">
-                    <div class="form-group mb-3">
-                        <label for="date" class="form-label">
-                            <i class="fas fa-calendar-alt me-2"></i>Joining Date
-                        </label>
-                        <input type='date' name='date' class="form-control" required/>
-                    </div>
-                </div>
             </div>
             
             <div class="text-center mt-4">
                 <button type="submit" class="btn btn-primary btn-lg">
-                    <i class="fas fa-plus-circle me-2"></i>Add Doctor
+                    <i class="fas fa-plus-circle me-2"></i>Update Doctor
                 </button>
             </div>
         </form>

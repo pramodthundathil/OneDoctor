@@ -346,11 +346,11 @@ def consultation(request):
         'Impetigo']
     
     if patiant_disease in disease1:
-        doctors = DoctorAdd.objects.filter(Doctor_spacial = 'Orthopedics')
+        doctors = DoctorAdd.objects.filter(Doctor_spacial__in=['Cardiologist', 'Dermatologist', 'Neurologist'])
     elif patiant_disease in disease2:
-        doctors = DoctorAdd.objects.filter(Doctor_spacial = 'Neurologists')
+        doctors = DoctorAdd.objects.filter(Doctor_spacial__in=['Pediatrician', 'General', 'Orthopedic'])
     elif patiant_disease in disease3:
-        doctors = DoctorAdd.objects.filter(Doctor_spacial = 'Obstetrics & Gynaecology')         
+        doctors = DoctorAdd.objects.filter(Doctor_spacial__in=['Psychiatrist', 'Oncologist', 'Gynecologist', 'Urologist'])        
     else:
         doctors = ['none']
         
@@ -508,6 +508,21 @@ def doctor_list(request):
         return redirect('doctor_list')
         
     return render(request,'main/doctor_list.html',{"doctors":doctors})
+
+from .forms import DoctorAddForm
+
+def doctor_edit(request, pk):
+    doctor = DoctorAdd.objects.get(id = pk)
+    form = DoctorAddForm()
+    if request.method == 'POST':
+        form = DoctorAddForm(request.POST, instance=doctor)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Doctor updated successfully")
+            return redirect('doctor_list')
+    else:
+        form = DoctorAddForm(instance=doctor)
+    return render(request, 'main/doctor_edit.html', {'form': form})
         
     
 def chat_bot(request):
